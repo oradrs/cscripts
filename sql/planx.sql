@@ -1379,6 +1379,20 @@ SELECT c.owner||'.'||c.table_name||' '||c.column_name table_and_column_name,
        c.table_name,
        c.column_name
 /
+
+PRO
+PRO Dependent Oobjects (order by REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE, TYPE, OWNER, NAME)
+PRO ~~~~~~~~~~~~~~~~~~
+COL REFERENCED_OWNER FOR A20;
+COL REFERENCED_NAME FOR A30;
+COL OWNER FOR A20;
+COL NAME FOR A30;
+SPO planx_&&sql_id._&&current_time..txt APP;
+select REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE, '|' SEPRTR, OWNER,NAME,TYPE
+from all_dependencies 
+where (REFERENCED_OWNER, REFERENCED_NAME) IN &&tables_list.
+order by REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE, TYPE, OWNER, NAME;
+
 -- spool off and cleanup
 PRO
 PRO planx_&&sql_id._&&current_time..txt has been generated
