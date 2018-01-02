@@ -1381,8 +1381,8 @@ SELECT c.owner||'.'||c.table_name||' '||c.column_name table_and_column_name,
 /
 
 PRO
-PRO Dependent Oobjects (order by REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE, TYPE, OWNER, NAME)
-PRO ~~~~~~~~~~~~~~~~~~
+PRO Dependent Objects (order by REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE, TYPE, OWNER, NAME)
+PRO ~~~~~~~~~~~~~~~~~
 COL REFERENCED_OWNER FOR A20;
 COL REFERENCED_NAME FOR A30;
 COL OWNER FOR A20;
