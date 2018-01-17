@@ -1386,6 +1386,8 @@ SELECT c.owner||'.'||c.table_name||' '||c.column_name table_and_column_name,
        c.column_name
 /
 
+-- Modified from here ------------------------------------------
+
 PRO
 PRO Dependent Objects (order by REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE, TYPE, OWNER, NAME)
 PRO ~~~~~~~~~~~~~~~~~
@@ -1398,6 +1400,22 @@ select REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE, '|' SEPRTR, OWNER,NAME,
 from all_dependencies 
 where (REFERENCED_OWNER, REFERENCED_NAME) IN &&tables_list.
 order by REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE, TYPE, OWNER, NAME;
+
+PRO
+PRO Generated SQL statments for gather_table_stats
+PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SPO planx_&&sql_id._&&current_time..txt APP;
+SELECT 'exec dbms_stats.gather_table_stats(ownname => ''' || owner || ''', tabname => ''' || table_name || ''' , estimate_percent => DBMS_STATS.AUTO_SAMPLE_SIZE, METHOD_OPT => ''FOR ALL COLUMNS SIZE AUTO'', degree=>6, cascade => TRUE);' gen_stmt
+FROM all_tables
+WHERE (owner, table_name) IN &&tables_list.;
+
+PRO
+PRO Current settings - init.ora param (Perfered values: timed_statistics=TRUE, statistics_level=ALL) :
+PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+show parameter timed_statistics;
+show parameter statistics_level;
+
+-- ------------------------------------------
 
 -- spool off and cleanup
 PRO
