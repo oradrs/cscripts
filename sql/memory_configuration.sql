@@ -19,6 +19,7 @@ SELECT inst_id,
 , 'java_pool_size'
 , 'streams_pool_size'
 , 'result_cache_max_size'
+, 'result_cache_max_result'
 , 'db_keep_cache_size	'
 , 'db_recycle_cache_size'
 , 'db_32k_cache_size'
