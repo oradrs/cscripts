@@ -6,6 +6,7 @@ pga AS (SELECT /*+ MATERIALIZE NO_MERGE */ SUM(value) target FROM gv$system_para
 db_block AS (SELECT /*+ MATERIALIZE NO_MERGE */ value bytes FROM v$system_parameter2 WHERE name = 'db_block_size'),
 db AS (SELECT /*+ MATERIALIZE NO_MERGE */ name, platform_name FROM v$database),
 inst AS (SELECT /*+ MATERIALIZE NO_MERGE */ host_name, version db_version FROM v$instance),
+runningSince AS (select trunc(sysdate) - trunc(STARTUP_TIME) runDays FROM v$instance),
 data AS (SELECT /*+ MATERIALIZE NO_MERGE */ SUM(bytes) bytes, COUNT(*) files, COUNT(DISTINCT ts#) tablespaces FROM v$datafile),
 temp AS (SELECT /*+ MATERIALIZE NO_MERGE */ SUM(bytes) bytes FROM v$tempfile),
 log AS (SELECT /*+ MATERIALIZE NO_MERGE */ SUM(bytes) * MAX(members) bytes FROM v$log),
@@ -18,6 +19,8 @@ SELECT /*+ NO_MERGE */ /* 1a.1 */
        'Database name:' system_item, db.name system_value FROM db
  UNION ALL
 SELECT 'Oracle Database version:', inst.db_version FROM inst
+ UNION ALL
+SELECT 'Running Since (last restart):', to_char(runningSince.runDays) || ' days' FROM runningSince
  UNION ALL
 SELECT 'Database block size:', TRIM(TO_CHAR(db_block.bytes / POWER(2,10), '90'))||' KB' FROM db_block
  UNION ALL
