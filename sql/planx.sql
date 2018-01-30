@@ -1410,7 +1410,7 @@ FROM all_tables
 WHERE (owner, table_name) IN &&tables_list.;
 
 PRO
-PRO Current settings - init.ora param (Perfered values: timed_statistics=TRUE, statistics_level=ALL) :
+PRO Current settings - init.ora param (Preferred values: timed_statistics=TRUE, statistics_level=ALL) :
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 show parameter timed_statistics;
 show parameter statistics_level;
