@@ -44,6 +44,7 @@ COL pl_secs_per_exec HEA 'PLSQL Secs|Per Exec';
 COL ja_secs_per_exec HEA 'Java Secs|Per Exec';
 
 SELECT h.instance_number,
+       s.snap_id,
        TO_CHAR(CAST(s.end_interval_time AS DATE), 'YYYY-MM-DD HH24:MI') end_time,
        h.plan_hash_value, 
        h.executions_total,
