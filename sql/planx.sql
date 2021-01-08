@@ -1393,6 +1393,38 @@ from all_dependencies
 where (REFERENCED_OWNER, REFERENCED_NAME) IN &&tables_list.
 order by REFERENCED_OWNER,REFERENCED_NAME,REFERENCED_TYPE, TYPE, OWNER, NAME;
 
+PRO
+PRO Generated SQL statments for gather_table_stats
+PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SPO planx_&&sql_id._&&current_time..txt APP;
+SELECT 'exec dbms_stats.gather_table_stats(ownname => ''' || owner || ''', tabname => ''' || table_name || ''' , estimate_percent => DBMS_STATS.AUTO_SAMPLE_SIZE, METHOD_OPT => ''FOR ALL COLUMNS SIZE AUTO'', degree=>6, cascade => TRUE);' gen_stmt
+FROM all_tables
+WHERE (owner, table_name) IN &&tables_list.;
+
+PRO
+PRO TEMP tablespace used by SQL  (MAX space used per day, ORDER BY ash_dt DESC)
+PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+break on sql_id skip 1
+SPO planx_&&sql_id._&&current_time..txt APP;
+SELECT sql_id, 
+       SQL_PLAN_HASH_VALUE,
+       TRUNC(sample_time) ash_dt,
+       MAX(TEMP_SPACE_ALLOCATED) /(1024*1024*1024) TEMP_SPACE_USED_GB
+FROM DBA_HIST_ACTIVE_SESS_HISTORY
+WHERE sql_id = TRIM('&&sql_id.')
+AND   TEMP_SPACE_ALLOCATED > 0
+GROUP BY sql_id, SQL_PLAN_HASH_VALUE,
+         TRUNC(sample_time)
+ORDER BY TRUNC(sample_time) desc;
+
+PRO
+PRO Current settings - init.ora param (Preferred values: timed_statistics=TRUE, statistics_level=ALL) :
+PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+show parameter timed_statistics;
+show parameter statistics_level;
+
+-- ------------------------------------------
+
 -- spool off and cleanup
 PRO
 PRO planx_&&sql_id._&&current_time..txt has been generated
