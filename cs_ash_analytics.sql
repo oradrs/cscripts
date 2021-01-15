@@ -19,6 +19,11 @@
 --
 ---------------------------------------------------------------------------------------
 --
+
+-- Added below 2 lines due to ORA-00600: internal error code, arguments: [qks3tGCL:1], [0], [], [], [], [], [], [], [], [], [], []
+alter session set events '10078 trace name context forever, level 1';
+alter session set "_with_subquery"=inline;
+
 @@cs_internal/cs_primary.sql
 @@cs_internal/cs_set.sql
 @@cs_internal/cs_def.sql
